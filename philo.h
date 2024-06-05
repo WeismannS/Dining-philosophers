@@ -24,7 +24,7 @@ typedef struct s_dates {
 } t_dates;
 
 typedef struct s_philo {
-  volatile t_state       s_tate;
+  volatile t_state       *s_tate;
   unsigned long thread_id;
   unsigned char id;
   pthread_mutex_t *meal_lock;
@@ -33,16 +33,18 @@ typedef struct s_philo {
   pthread_mutex_t *state_change;
   pthread_mutex_t *self;
   t_dates       dates;
+  pthread_mutex_t *print;
+
   size_t       meals_eaten;
 } t_philo;
 
 void ft_sleep(unsigned int microseconds);
 void ft_free(t_philo **philos);
 int	ft_atoi(const char *s, unsigned long *num);
-void ft_printf(char *s, long j);
 size_t	get_current_time(void);
 pthread_mutex_t ** set_forks(int *parsed_args);
 int * parse(char *av[], t_philo **philos, int ac);
 t_state read_state(t_philo *philo);
 int change_state(t_philo *philo, t_state state);
+int ft_printf(t_philo *philo, t_state state, int fork);
 #endif
