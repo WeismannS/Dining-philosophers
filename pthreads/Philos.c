@@ -6,7 +6,7 @@
 /*   By: baarif <baarif@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 02:33:45 by baarif            #+#    #+#             */
-/*   Updated: 2024/08/10 10:50:17 by baarif           ###   ########.fr       */
+/*   Updated: 2024/08/11 21:04:36 by baarif           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,23 @@
 
 void	philo_eat(t_philo *philo)
 {
+	if (philo->data->num_meals != -1
+		&& philo->meals_eaten == philo->data->num_meals)
+		return ((void)philo->data->philos_finished_eaten++);
 	pthread_mutex_lock(philo->main_fork);
 	print_state(philo, "has taken a fork");
+	if (philo->data->num_philos == 1)
+	{
+		pthread_mutex_unlock(philo->main_fork);
+		usleep((philo->data->time_to_die + 2) * 1000);
+		return ;
+	}
 	pthread_mutex_lock(philo->sec_fork);
 	print_state(philo, "has taken a fork");
 	print_state(philo, "is eating");
 	philo->last_meal_time = get_time();
 	usleep(philo->data->time_to_eat * 1000);
 	philo->meals_eaten++;
-	if (philo->data->num_meals != -1
-		&& philo->meals_eaten == philo->data->num_meals)
-		philo->data->philos_finished_eaten++;
 	pthread_mutex_unlock(philo->main_fork);
 	pthread_mutex_unlock(philo->sec_fork);
 }
@@ -51,9 +57,9 @@ void	*philosopher(void *arg)
 
 void	check_philos(t_data *data)
 {
-	int         i;
+	int			i;
 	long long	current_time;
-	
+
 	i = 0;
 	while (i < data->num_philos && !data->simulation_stop)
 	{

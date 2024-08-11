@@ -6,7 +6,7 @@
 /*   By: baarif <baarif@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 02:33:34 by baarif            #+#    #+#             */
-/*   Updated: 2024/08/10 10:48:38 by baarif           ###   ########.fr       */
+/*   Updated: 2024/08/11 21:06:45 by baarif           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,15 @@ void	cleanup(t_data *data)
 	free(data->philos);
 }
 
+int	handle_one_philo(t_data data)
+{
+	printf("0 1 has taken a fork");
+	usleep(data.time_to_die * 1000);
+	printf("0 1 has died");
+	cleanup(&data);
+	return (1);
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
@@ -87,8 +96,6 @@ int	main(int argc, char **argv)
 		printf("Initialization failed\n");
 		return (1);
 	}
-	if (data.num_philos == 1)
-		return (0);
 	configure_hand(&data);
 	start_simulation(&data);
 	cleanup(&data);

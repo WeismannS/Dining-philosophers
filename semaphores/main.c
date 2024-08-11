@@ -6,7 +6,7 @@
 /*   By: baarif <baarif@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 02:33:34 by baarif            #+#    #+#             */
-/*   Updated: 2024/08/10 12:02:47 by baarif           ###   ########.fr       */
+/*   Updated: 2024/08/11 20:57:11 by baarif           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,13 @@ int	main(int argc, char **argv)
 		printf("Initialization failed\n");
 		return (1);
 	}
-	if (data.num_philos == 1)
-		return (0);
 	start_simulation(&data);
 	i = 0;
-	sem_wait(data.death);
+	if (data.num_meals != -1)
+		while (i++ < data.num_philos - 1)
+			sem_wait(data.death);
+	else
+		sem_wait(data.death);
 	cleanup(&data);
 	return (0);
 }

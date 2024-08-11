@@ -6,7 +6,7 @@
 /*   By: baarif <baarif@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 02:33:45 by baarif            #+#    #+#             */
-/*   Updated: 2024/08/11 15:03:47 by baarif           ###   ########.fr       */
+/*   Updated: 2024/08/11 20:58:03 by baarif           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ void	philo_eat(t_philo *philo)
 	}
 	sem_wait(philo->data->forks);
 	print_state(philo, "has taken a fork");
+	if (philo->data->num_philos == 1)
+	{
+		usleep(philo->data->time_to_die * 1000);
+		return ;
+	}
 	sem_wait(philo->data->forks);
 	print_state(philo, "has taken a fork");
 	print_state(philo, "is eating");
@@ -55,6 +60,7 @@ void	*philosopher(void *arg)
 void	check_philos(t_philo *philo)
 {
 	long long	current_time;
+	int			i;
 
 	while (!philo->data->simulation_stop)
 	{
@@ -64,8 +70,10 @@ void	check_philos(t_philo *philo)
 			philo->data->simulation_stop = 1;
 			sem_wait(philo->data->write);
 			printf("%lld %d died\n", current_time - philo->data->start_time,
-				philo->id + 1);
-			sem_post(philo->data->death);
+				philo->id);
+			i = 0;
+			while (i++ < philo->data->num_philos)
+				sem_post(philo->data->death);
 			break ;
 		}
 	}
@@ -73,9 +81,8 @@ void	check_philos(t_philo *philo)
 
 void	start_simulation(t_data *data)
 {
-	int	i;
+	static int	i = 0;
 
-	i = 0;
 	data->start_time = get_time();
 	while (i < data->num_philos)
 	{
@@ -85,7 +92,8 @@ void	start_simulation(t_data *data)
 		{
 			if (pthread_create(&data->philos[i].thread, NULL, philosopher,
 					&data->philos[i]) != 0)
-			return (printf("Failed to create thread\n"), (void) 0);
+				return (printf("Failed to create thread\n"), (void)0);
+			break ;
 		}
 		usleep(100);
 		i++;
