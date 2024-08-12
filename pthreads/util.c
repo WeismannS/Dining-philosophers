@@ -6,7 +6,7 @@
 /*   By: baarif <baarif@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 02:33:49 by baarif            #+#    #+#             */
-/*   Updated: 2024/08/01 02:33:50 by baarif           ###   ########.fr       */
+/*   Updated: 2024/08/13 00:37:17 by baarif           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,13 @@ long long	get_time(void)
 
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000LL) + (tv.tv_usec / 1000));
+}
+
+void	precise_sleep(long long duration)
+{
+	long long	start;
+
+	start = get_time();
+	while (get_time() - start < duration)
+		usleep(100);
 }

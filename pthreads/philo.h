@@ -6,7 +6,7 @@
 /*   By: baarif <baarif@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 02:33:42 by baarif            #+#    #+#             */
-/*   Updated: 2024/08/01 02:33:43 by baarif           ###   ########.fr       */
+/*   Updated: 2024/08/13 00:27:27 by baarif           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,5 @@ void				cleanup(t_data *data);
 long long			get_time(void);
 void				print_state(t_philo *philo, char *message);
 int					ft_atoi(const char *str);
+void				precise_sleep(long long duration);
 #endif

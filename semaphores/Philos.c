@@ -6,7 +6,7 @@
 /*   By: baarif <baarif@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 02:33:45 by baarif            #+#    #+#             */
-/*   Updated: 2024/08/11 20:58:03 by baarif           ###   ########.fr       */
+/*   Updated: 2024/08/13 00:33:46 by baarif           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ void	philo_eat(t_philo *philo)
 	print_state(philo, "has taken a fork");
 	if (philo->data->num_philos == 1)
 	{
-		usleep(philo->data->time_to_die * 1000);
+		usleep((philo->data->time_to_die + 2) * 1000);
 		return ;
 	}
 	sem_wait(philo->data->forks);
 	print_state(philo, "has taken a fork");
 	print_state(philo, "is eating");
 	philo->last_meal_time = get_time();
-	usleep(philo->data->time_to_eat * 1000);
+	precise_sleep(philo->data->time_to_eat);
 	philo->meals_eaten++;
 	sem_post(philo->data->forks);
 	sem_post(philo->data->forks);
@@ -48,11 +48,11 @@ void	*philosopher(void *arg)
 		if (philo->data->simulation_stop)
 			break ;
 		print_state(philo, "is sleeping");
-		usleep(philo->data->time_to_sleep * 1000);
+		precise_sleep(philo->data->time_to_sleep);
 		if (philo->data->simulation_stop)
 			break ;
 		print_state(philo, "is thinking");
-		usleep(1000);
+		precise_sleep(1);
 	}
 	return (NULL);
 }
@@ -101,9 +101,6 @@ void	start_simulation(t_data *data)
 	if (i == data->num_philos)
 		return ;
 	while (!data->simulation_stop)
-	{
 		check_philos(&data->philos[i]);
-		usleep(1000);
-	}
 	pthread_join(data->philos[i].thread, NULL);
 }
