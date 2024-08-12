@@ -6,7 +6,7 @@
 /*   By: baarif <baarif@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 02:33:49 by baarif            #+#    #+#             */
-/*   Updated: 2024/08/13 00:37:20 by baarif           ###   ########.fr       */
+/*   Updated: 2024/08/13 00:53:07 by baarif           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,20 @@ void	print_state(t_philo *philo, char *message)
 
 int	parse_arguments(int argc, char **argv, t_data *data)
 {
+	int	err;
+
+	err = 0;
 	if (argc != 5 && argc != 6)
 		return (0);
-	data->num_philos = ft_atoi(argv[1]);
-	data->time_to_die = ft_atoi(argv[2]);
-	data->time_to_eat = ft_atoi(argv[3]);
-	data->time_to_sleep = ft_atoi(argv[4]);
+	data->num_philos = ft_atoi(argv[1], &err);
+	data->time_to_die = ft_atoi(argv[2], &err);
+	data->time_to_eat = ft_atoi(argv[3], &err);
+	data->time_to_sleep = ft_atoi(argv[4], &err);
 	data->num_meals = -1;
 	if (argc == 6)
-		data->num_meals = ft_atoi(argv[5]);
+		data->num_meals = ft_atoi(argv[5], &err);
+	if (err == 1)
+		return (0);
 	if (data->num_philos <= 0 || data->time_to_die <= 0
 		|| data->time_to_eat <= 0 || data->time_to_sleep <= 0 || (argc == 6
 			&& data->num_meals <= 0))
