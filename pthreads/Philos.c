@@ -14,9 +14,6 @@
 
 void	philo_eat(t_philo *philo)
 {
-	if (philo->data->num_meals != -1
-		&& philo->meals_eaten == philo->data->num_meals)
-		return ((void)philo->data->philos_finished_eaten++);
 	pthread_mutex_lock(philo->main_fork);
 	print_state(philo, "has taken a fork");
 	if (philo->data->num_philos == 1)
@@ -43,6 +40,12 @@ void	*philosopher(void *arg)
 	while (!philo->data->simulation_stop)
 	{
 		philo_eat(philo);
+		if (philo->data->num_meals != -1
+			&& philo->meals_eaten == philo->data->num_meals)
+		{
+			((void)philo->data->philos_finished_eaten++);
+			break ;
+		}
 		if (philo->data->simulation_stop)
 			break ;
 		print_state(philo, "is sleeping");

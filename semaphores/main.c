@@ -61,7 +61,6 @@ void	cleanup(t_data *data)
 int	main(int argc, char **argv)
 {
 	t_data	data;
-	int		i;
 
 	if (!parse_arguments(argc, argv, &data))
 	{
@@ -74,12 +73,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	start_simulation(&data);
-	i = 0;
-	if (data.num_meals != -1)
-		while (i++ < data.num_philos - 1)
-			sem_wait(data.death);
-	else
-		sem_wait(data.death);
+	sem_wait(data.death);
 	cleanup(&data);
 	return (0);
 }
